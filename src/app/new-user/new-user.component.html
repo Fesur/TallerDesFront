@@ -1,0 +1,48 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow">
+        <div class="card-body">
+          <h3 class="card-title mb-4 text-center">Registro de Usuario</h3>
+          <form (ngSubmit)="agregarUsuario()" #userForm="ngForm" autocomplete="off">
+            <div class="mb-3">
+              <label for="correo" class="form-label">Correo</label>
+              <input id="correo" name="correo" type="email" class="form-control" [(ngModel)]="correo" required>
+            </div>
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre</label>
+              <input id="nombre" name="nombre" type="text" class="form-control" [(ngModel)]="nombre" required>
+            </div>
+            <div class="mb-3">
+              <label for="apellido" class="form-label">Apellido</label>
+              <input id="apellido" name="apellido" type="text" class="form-control" [(ngModel)]="apellido" required>
+            </div>
+            <div class="mb-3">
+              <label for="edad" class="form-label">Edad</label>
+              <input id="edad" name="edad" type="number" class="form-control" [(ngModel)]="edad" required min="1">
+            </div>
+            <div class="mb-3 position-relative">
+              <label for="password" class="form-label">Contraseña</label>
+            <div class="input-group">
+                <input id="password" name="password" [type]="showPassword ? 'text' : 'password'" class="form-control" [(ngModel)]="password" required>
+                <button type="button" class="btn btn-outline-secondary" (click)="showPassword = !showPassword" tabindex="-1">
+                  <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                </button>
+              </div>
+            </div>
+            <div class="mb-3 position-relative">
+              <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+              <div class="input-group">
+                <input id="confirmPassword" name="confirmPassword" [type]="showConfirmPassword ? 'text' : 'password'" class="form-control" [(ngModel)]="confirmPassword" required>
+                <button type="button" class="btn btn-outline-secondary" (click)="showConfirmPassword = !showConfirmPassword" tabindex="-1">
+                  <i class="bi" [ngClass]="showConfirmPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                </button>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Registrar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

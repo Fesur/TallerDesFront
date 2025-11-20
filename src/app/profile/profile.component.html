@@ -1,0 +1,210 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <h1>Mi Perfil</h1>
+    <div class="tabs">
+      <button 
+        [class.active]="activeTab === 'profile'" 
+        (click)="setActiveTab('profile')">
+        <i class="fas fa-user"></i> Perfil
+      </button>
+      <button 
+        [class.active]="activeTab === 'orders'" 
+        (click)="setActiveTab('orders')">
+        <i class="fas fa-shopping-bag"></i> Mis Reservas
+      </button>
+      <button 
+        [class.active]="activeTab === 'security'" 
+        (click)="setActiveTab('security')">
+        <i class="fas fa-shield-alt"></i> Seguridad
+      </button>
+    </div>
+  </div>
+  
+  <!-- Profile Section -->
+  <div class="profile-content" *ngIf="activeTab === 'profile'">
+    <div class="profile-card">
+      <div class="profile-info">
+        <div class="profile-image-container">
+          <img [src]="userProfile.photoURL" alt="Foto de perfil" class="profile-image">
+          <div class="image-upload" *ngIf="isEditMode">
+            <label for="file-input">
+              <i class="fas fa-camera"></i>
+            </label>
+            <input id="file-input" type="file" accept="image/*" (change)="onFileSelected($event)">
+          </div>
+        </div>
+        
+        <div class="profile-details">
+          <div class="edit-toggle">
+            <button *ngIf="!isEditMode" class="btn-edit" (click)="toggleEditMode()">
+              <i class="fas fa-edit"></i> Editar
+            </button>
+            <div *ngIf="isEditMode" class="edit-actions">
+              <button class="btn-save" (click)="saveProfile()">
+                <i class="fas fa-save"></i> Guardar
+              </button>
+              <button class="btn-cancel" (click)="toggleEditMode()">
+                <i class="fas fa-times"></i> Cancelar
+              </button>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Nombre</label>
+            <input 
+              type="text" 
+              [(ngModel)]="userProfile.displayName" 
+              [disabled]="!isEditMode"
+              class="form-control">
+          </div>
+          
+          <div class="form-group">
+            <label>Email</label>
+            <input 
+              type="email" 
+              [(ngModel)]="userProfile.email" 
+              [disabled]="!isEditMode"
+              class="form-control">
+          </div>
+          
+          <div class="form-group">
+            <label>Teléfono</label>
+            <input 
+              type="tel" 
+              [(ngModel)]="userProfile.phone" 
+              [disabled]="!isEditMode"
+              class="form-control">
+          </div>
+        </div>
+      </div>
+      
+      <div class="address-info">
+        <h3>Dirección de envío</h3>
+        
+        <div class="form-group">
+          <label>Dirección</label>
+          <input 
+            type="text" 
+            [(ngModel)]="userProfile.address" 
+            [disabled]="!isEditMode"
+            class="form-control">
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Ciudad</label>
+            <input 
+              type="text" 
+              [(ngModel)]="userProfile.city" 
+              [disabled]="!isEditMode"
+              class="form-control">
+          </div>
+          
+          <div class="form-group">
+            <label>Código Postal</label>
+            <input 
+              type="text" 
+              [(ngModel)]="userProfile.postalCode" 
+              [disabled]="!isEditMode"
+              class="form-control">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Orders Section -->
+  <div class="profile-content" *ngIf="activeTab === 'orders'">
+    <div class="orders-card">
+      <h2>Historial de Reservas</h2>
+      
+      <div *ngIf="orders.length === 0" class="no-orders">
+        <i class="fas fa-shopping-bag"></i>
+        <p>No tienes reservas recientes</p>
+        <button class="btn-shop" routerLink="/carrito">Ir a reservar</button>
+      </div>
+      
+      <div *ngIf="orders.length > 0" class="orders-list">
+        <div *ngFor="let order of orders" class="order-item">
+          <div class="order-header">
+            <div class="order-info">
+              <h3>Pedido #{{order.id}}</h3>
+              <span class="order-date">{{order.date | date:'dd/MM/yyyy'}}</span>
+            </div>
+            <span [class]="'order-status ' + getOrderStatusClass(order.status)">
+              {{order.status}}
+            </span>
+          </div>
+          
+          <div class="order-products">
+            <div *ngFor="let item of order.items" class="order-product">
+              <img [src]="item.imagen" [alt]="item.titulo" class="product-image">
+              <div class="product-info">
+                <h4>{{item.titulo}}</h4>
+                <p class="author">por {{item.autor}}</p>
+                <div class="product-price">
+                  <span class="quantity">{{item.cantidad}}x</span>
+                  <span class="price">${{item.precio}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="order-footer">
+            <span class="order-total">Total: ${{order.total}}</span>
+            <button class="btn-reorder">Reservar de nuevo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Security Section -->
+  <div class="profile-content" *ngIf="activeTab === 'security'">
+    <div class="security-card">
+      <h2>Seguridad de la cuenta</h2>
+      
+      <div class="password-section">
+        <h3>Cambiar contraseña</h3>
+        
+        <div class="form-group">
+          <label>Contraseña actual</label>
+          <input 
+            type="password" 
+            [(ngModel)]="currentPassword" 
+            class="form-control">
+        </div>
+        
+        <div class="form-group">
+          <label>Nueva contraseña</label>
+          <input 
+            type="password" 
+            [(ngModel)]="newPassword" 
+            class="form-control">
+        </div>
+        
+        <div class="form-group">
+          <label>Confirmar nueva contraseña</label>
+          <input 
+            type="password" 
+            [(ngModel)]="confirmPassword" 
+            class="form-control">
+        </div>
+        
+        <button class="btn-change-password" (click)="changePassword()">
+          Cambiar contraseña
+        </button>
+      </div>
+      
+      <div class="security-info">
+        <h3>Información adicional</h3>
+        <p>Para proteger tu cuenta, te recomendamos:</p>
+        <ul>
+          <li>Usar una contraseña única para tu cuenta</li>
+          <li>Nunca compartir tus credenciales con otras personas</li>
+          <li>Cambiar tu contraseña regularmente</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

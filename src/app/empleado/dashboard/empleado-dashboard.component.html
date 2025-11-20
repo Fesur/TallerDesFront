@@ -1,0 +1,28 @@
+<div class="empleado-container">
+  <div *ngIf="loading" class="loading-overlay">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p>Verificando credenciales...</p>
+  </div>
+  <ng-container *ngIf="!loading && isEmpleado">
+    <div class="empleado-sidebar">
+      <div class="sidebar-header">
+        <img src="assets/images/logov3.png" alt="Logo" class="empleado-logo">
+        <h3>Panel Empleado</h3>
+      </div>
+      <div class="sidebar-menu">
+        <a *ngFor="let item of menuItems"
+           [routerLink]="item.route"
+           routerLinkActive="active"
+           class="menu-item">
+          <i class="fas {{item.icon}}"></i>
+          <span>{{item.name}}</span>
+        </a>
+      </div>
+    </div>
+    <div class="empleado-content">
+      <router-outlet></router-outlet>
+    </div>
+  </ng-container>
+</div>

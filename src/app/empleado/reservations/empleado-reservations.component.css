@@ -1,0 +1,14 @@
+.empleado-reservations-container {
+  padding: 1rem;
+}
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.book-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

@@ -1,0 +1,57 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <a routerLink="/">
+        <img src="assets/images/logov3.png" alt="Logo" class="navbar-logo">
+      </a>
+    </div>
+    
+    <button class="menu-toggle" (click)="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="navbar-menu" [class.is-active]="isMenuOpen">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">
+        <i class="fas fa-home"></i>
+        <span>Inicio</span>
+      </a>
+      
+      <a routerLink="/carrito" routerLinkActive="active" class="navbar-item">
+        <i class="fas fa-shopping-cart"></i>
+        <span>Carrito</span>
+      </a>
+
+      <a routerLink="/about" routerLinkActive="active" class="navbar-item">
+        <i class="fas fa-info-circle"></i>
+        <span>Acerca de</span>
+      </a>
+      
+      <!-- Profile Link (Only for logged in users) -->
+      <a *ngIf="isLoggedIn && !isAdmin" routerLink="/profile" routerLinkActive="active" class="navbar-item">
+        <i class="fas fa-user-circle"></i>
+        <span>Mi Perfil</span>
+      </a>
+      
+      <!-- Admin Panel Link -->
+      <a *ngIf="isAdmin" routerLink="/admin" routerLinkActive="active" class="navbar-item admin-link">
+        <i class="fas fa-cog"></i>
+        <span>Panel de Administración</span>
+      </a>
+
+      <a *ngIf="isEmpleado" routerLink="/empleado" routerLinkActive="active" class="navbar-item admin-link">
+        <i class="fas fa-cog"></i>
+        <span>Panel Empleado</span>
+      </a>
+
+      <a *ngIf="!isLoggedIn" routerLink="/login" routerLinkActive="active" class="navbar-item">
+        <i class="fas fa-user"></i>
+        <span>Iniciar Sesión</span>
+      </a>
+
+      <button *ngIf="isLoggedIn" (click)="cerrarSesion()" class="navbar-item logout-btn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Cerrar Sesión</span>
+      </button>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,107 @@
+<div class="admin-container">
+  <!-- Loading state -->
+  <div *ngIf="loading" class="loading-overlay">
+    <div class="spinner-container">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p>Verificando credenciales...</p>
+    </div>
+  </div>
+
+  <!-- Admin dashboard content - only show when not loading and isAdmin -->
+  <ng-container *ngIf="!loading && isAdmin">
+    <div class="admin-sidebar">
+      <div class="sidebar-header">
+        <img src="assets/images/logov3.png" alt="Logo" class="admin-logo">
+        <h3>Panel Admin</h3>
+      </div>
+      
+      <div class="sidebar-menu">
+        <a *ngFor="let item of menuItems" 
+           [routerLink]="item.route" 
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{exact: item.route === '/admin'}"
+           class="menu-item">
+          <i class="fas {{item.icon}}"></i>
+          <span>{{item.name}}</span>
+        </a>
+      </div>
+    </div>
+    
+    <div class="admin-content">
+      <div class="admin-header">
+        <h1>Panel de Administración</h1>
+        <div class="admin-actions">
+          <div class="user-info">
+            <i class="fas fa-user-circle"></i>
+            <span>Administrador</span>
+          </div>
+          <button class="btn-logout" (click)="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            Cerrar Sesión
+          </button>
+        </div>
+      </div>
+      
+      <div class="content-container">
+        <!-- If no specific admin component is loaded, show a welcome dashboard -->
+        <div *ngIf="isAdminRoute()" class="admin-welcome">
+          <div class="welcome-header">
+            <i class="fas fa-tachometer-alt welcome-icon"></i>
+            <h2>Bienvenido al Panel de Administración</h2>
+            <p>Selecciona una opción del menú para comenzar a gestionar tu sitio</p>
+          </div>
+          
+          <div class="admin-quick-stats">
+            <div class="stat-card">
+              <div class="stat-icon books">
+                <i class="fas fa-book"></i>
+              </div>
+              <div class="stat-info">
+                <h3>Gestión de Libros</h3>
+                <p>Administra el catálogo, agrega nuevos títulos y actualiza el inventario</p>
+                <a [routerLink]="'/admin/books'" class="stat-link">Ir a Libros</a>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon reservations">
+                <i class="fas fa-bookmark"></i>
+              </div>
+              <div class="stat-info">
+                <h3>Reservas</h3>
+                <p>Gestiona las reservas de libros y su estado</p>
+                <a [routerLink]="'/admin/reservations'" class="stat-link">Ir a Reservas</a>
+              </div>
+            </div>
+
+          <div class="stat-card">
+            <div class="stat-icon users">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-info">
+              <h3>Roles</h3>
+              <p>Administra los usuarios registrados y sus roles</p>
+              <a [routerLink]="'/admin/roles'" class="stat-link">Ir a Roles</a>
+            </div>
+          </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon about">
+                <i class="fas fa-info-circle"></i>
+              </div>
+              <div class="stat-info">
+                <h3>Acerca De</h3>
+                <p>Personaliza la información de la página "Acerca de Nosotros"</p>
+                <a [routerLink]="'/admin/about'" class="stat-link">Ir a Editar</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </ng-container>
+</div>

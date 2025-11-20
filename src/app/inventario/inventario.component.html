@@ -1,0 +1,152 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">Gestión de Inventario</h1>
+    <button class="btn btn-secondary" (click)="cargarDatosPrueba()">
+      <i class="fas fa-database me-2"></i>
+      Cargar Datos de Prueba
+    </button>
+  </div>
+
+  <!-- Formulario para agregar/editar libro -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h2 class="card-title">{{ libroEditando ? 'Editar Libro' : 'Agregar Nuevo Libro' }}</h2>
+      <form (ngSubmit)="libroEditando ? actualizarLibro() : agregarLibro()">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="titulo" class="form-label">Título</label>
+              <input type="text" class="form-control" id="titulo" 
+                [ngModel]="libroActual.titulo" 
+                (ngModelChange)="onCampoChange('titulo', $event)"
+                name="titulo" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="autor" class="form-label">Autor</label>
+              <input type="text" class="form-control" id="autor" 
+                [ngModel]="libroActual.autor" 
+                (ngModelChange)="onCampoChange('autor', $event)"
+                name="autor" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="precio" class="form-label">Precio</label>
+              <input type="number" class="form-control" id="precio" 
+                [ngModel]="libroActual.precio" 
+                (ngModelChange)="onCampoChange('precio', $event)"
+                name="precio" required min="0">
+            </div>
+
+            <div class="mb-3">
+              <label for="stock" class="form-label">Stock</label>
+              <input type="number" class="form-control" id="stock" 
+                [ngModel]="libroActual.stock" 
+                (ngModelChange)="onCampoChange('stock', $event)"
+                name="stock" required min="0">
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="descripcion" class="form-label">Descripción</label>
+              <textarea class="form-control" id="descripcion" rows="3"
+                [ngModel]="libroActual.descripcion" 
+                (ngModelChange)="onCampoChange('descripcion', $event)"
+                name="descripcion" required></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label for="imagen" class="form-label">URL de la Imagen</label>
+              <input type="text" class="form-control" id="imagen" 
+                [ngModel]="libroActual.imagen" 
+                (ngModelChange)="onCampoChange('imagen', $event)"
+                name="imagen" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Géneros</label>
+              <div class="generos-container">
+                <div class="btn-group flex-wrap" role="group">
+                  @for (genero of generosDisponibles; track genero) {
+                    <input type="checkbox" class="btn-check" [id]="'genero' + genero" 
+                      [checked]="libroActual.generos.includes(genero)"
+                      (change)="toggleGenero(libroActual, genero)">
+                    <label class="btn btn-outline-primary btn-sm m-1" [for]="'genero' + genero">
+                      {{ genero }}
+                    </label>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">
+            {{ libroEditando ? 'Actualizar' : 'Agregar' }}
+          </button>
+          @if (libroEditando) {
+            <button type="button" class="btn btn-secondary" (click)="libroEditando = null">
+              Cancelar
+            </button>
+          }
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Tabla de libros -->
+  <div class="card">
+    <div class="card-body">
+      <h2 class="card-title">Lista de Libros</h2>
+      
+      @if (libros.length === 0) {
+        <div class="alert alert-warning">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          No hay libros en el inventario
+        </div>
+      } @else {
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Géneros</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (libro of libros; track libro.id) {
+                <tr>
+                  <td>{{ libro.titulo }}</td>
+                  <td>{{ libro.autor }}</td>
+                  <td>${{ libro.precio }}</td>
+                  <td>{{ libro.stock }}</td>
+                  <td>
+                    @for (genero of libro.generos; track genero) {
+                      <span class="badge bg-primary me-1">{{ genero }}</span>
+                    }
+                  </td>
+                  <td>
+                    <div class="btn-group">
+                      <button class="btn btn-sm btn-info me-1" (click)="editarLibro(libro)">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button class="btn btn-sm btn-danger" (click)="eliminarLibro(libro.id!)">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  </div>
+</div> 

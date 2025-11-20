@@ -1,0 +1,169 @@
+.libro-detalle {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.libro-imagen {
+  flex: 0 0 400px;
+}
+
+.libro-imagen img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.libro-info {
+  flex: 1;
+}
+
+h1 {
+  margin: 0 0 0.5rem;
+  color: #2c3e50;
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+}
+
+.autor {
+  color: #666;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.categoria {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background-color: #e1f0ff;
+  color: #3498db;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.descripcion {
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.precio-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.precio {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.cantidad-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #f8f9fa;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+.cantidad-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.cantidad-btn:hover {
+  background-color: #2980b9;
+}
+
+.cantidad {
+  font-size: 1.2rem;
+  min-width: 30px;
+  text-align: center;
+}
+
+.agregar-carrito, .login-required {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.agregar-carrito {
+  background-color: #3498db;
+  color: white;
+}
+
+.agregar-carrito:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+.login-required {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.login-required:hover {
+  background-color: #c0392b;
+  transform: translateY(-2px);
+}
+
+.total {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+@media (max-width: 768px) {
+  .libro-detalle {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .libro-imagen {
+    flex: 0 0 auto;
+  }
+
+  .precio-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cantidad-container {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .agregar-carrito, .login-required {
+    width: 100%;
+    justify-content: center;
+  }
+} 

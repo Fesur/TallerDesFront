@@ -1,0 +1,199 @@
+<div class="books-admin-container">
+  <div class="section-header">
+    <h2>Gestión de Libros</h2>
+    <button class="btn btn-primary" (click)="crearNuevoLibro()">
+      <i class="fas fa-plus"></i> Nuevo Libro
+    </button>
+  </div>
+  
+  <!-- Filtros -->
+  <div class="filter-section card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Filtros</h5>
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label for="filtroTitulo" class="form-label">Título</label>
+          <input type="text" class="form-control" id="filtroTitulo" 
+                 [(ngModel)]="filtroTitulo" placeholder="Buscar por título">
+        </div>
+        <div class="col-md-4 mb-3">
+          <label for="filtroCategoria" class="form-label">Categoría</label>
+          <select class="form-select" id="filtroCategoria" [(ngModel)]="filtroCategoria">
+            <option value="">Todas las categorías</option>
+            <option *ngFor="let categoria of categorias" [value]="categoria">
+              {{ categoria }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-4 mb-3 d-flex align-items-end">
+          <button class="btn btn-primary me-2" (click)="aplicarFiltros()">
+            <i class="fas fa-filter"></i> Aplicar
+          </button>
+          <button class="btn btn-secondary" (click)="limpiarFiltros()">
+            <i class="fas fa-times"></i> Limpiar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Tabla de libros -->
+  <div class="card mb-4" *ngIf="!libroSeleccionado">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Imagen</th>
+              <th>Título</th>
+              <th>Autor</th>
+              <th>Categoría</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let libro of libros">
+              <td>
+                <img [src]="libro.imagen || 'https://images.cdn1.buscalibre.com/fit-in/360x360/61/18/61189807904118e0fc5d2d5001de5929.jpg'" alt="Imagen de libro" class="book-thumb"
+                     (error)="libro.imagen = 'https://images.cdn1.buscalibre.com/fit-in/360x360/61/18/61189807904118e0fc5d2d5001de5929.jpg'">
+              </td>
+              <td>{{ libro.titulo }}</td>
+              <td>{{ libro.autor }}</td>
+              <td>
+                <span class="badge bg-primary">{{ libro.generos }}</span>
+              </td>
+              <td>${{ libro.precio }}</td>
+              <td>
+                <span [class]="'badge ' + (libro.stock > 10 ? 'bg-success' : libro.stock > 0 ? 'bg-warning' : 'bg-danger')">
+                  {{ libro.stock }}
+                </span>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <button class="btn btn-sm btn-info" (click)="seleccionarLibro(libro)">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn btn-sm btn-danger" (click)="eliminarLibro(libro.id!)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="empty-state" *ngIf="libros.length === 0">
+        <i class="fas fa-book fa-3x mb-3"></i>
+        <h3>No hay libros disponibles</h3>
+        <p>Comienza agregando un nuevo libro o ajusta los filtros de búsqueda.</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Formulario para editar/crear libro -->
+  <div class="card" *ngIf="libroSeleccionado">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">{{ modoEdicion ? 'Editar Libro' : 'Nuevo Libro' }}</h5>
+      <button class="btn btn-close" (click)="cancelarEdicion()"></button>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="guardarLibro()">
+        <div class="row">
+          <div class="col-md-8">
+            <!-- Información básica -->
+            <div class="mb-3">
+              <label for="titulo" class="form-label">Título *</label>
+              <input type="text" class="form-control" id="titulo" 
+                     [(ngModel)]="libroSeleccionado.titulo" name="titulo" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="autor" class="form-label">Autor *</label>
+              <input type="text" class="form-control" id="autor" 
+                     [(ngModel)]="libroSeleccionado.autor" name="autor" required>
+            </div>
+            
+            <div class="row">
+                      
+              <div class="col-md-6 mb-3">
+                <label for="editorial" class="form-label">Editorial</label>
+                <input type="text" class="form-control" id="editorial" 
+                       [(ngModel)]="libroSeleccionado.editorial" name="editorial">
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="precio" class="form-label">Precio *</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input type="number" class="form-control" id="precio" 
+                         [(ngModel)]="libroSeleccionado.precio" name="precio" required min="0">
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="stock" class="form-label">Stock *</label>
+                <input type="number" class="form-control" id="stock" 
+                       [(ngModel)]="libroSeleccionado.stock" name="stock" required min="0">
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="descripcion" class="form-label">Descripción *</label>
+              <textarea class="form-control" id="descripcion" rows="4" 
+                        [(ngModel)]="libroSeleccionado.descripcion" name="descripcion" required></textarea>
+            </div>
+            
+            <div class="mb-3">
+              <label for="imagen" class="form-label">URL de la Imagen *</label>
+              <input type="text" class="form-control" id="imagen" 
+                     [(ngModel)]="libroSeleccionado.imagen" name="imagen" required>
+            </div>
+            
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="destacado" 
+                     [(ngModel)]="libroSeleccionado.destacado" name="destacado">
+              <label class="form-check-label" for="destacado">Destacar en página principal</label>
+            </div>
+          </div>
+          
+          <div class="col-md-4">
+            <!-- Previsualización y géneros -->
+            <div class="book-preview mb-3">
+              <img [src]="libroSeleccionado.imagen || 'https://images.cdn1.buscalibre.com/fit-in/360x360/61/18/61189807904118e0fc5d2d5001de5929.jpg'" alt="Previsualización de libro" class="img-fluid book-preview-img"
+                   (error)="libroSeleccionado.imagen = 'https://images.cdn1.buscalibre.com/fit-in/360x360/61/18/61189807904118e0fc5d2d5001de5929.jpg'">
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">Géneros</label>
+              <div class="generos-container">
+                <div class="btn-group-vertical w-100">
+                  <div *ngFor="let genero of categorias" class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" [id]="'genero-' + genero"
+                           [checked]="tieneGenero(genero)" (change)="toggleGenero(genero)">
+                    <label class="form-check-label" [for]="'genero-' + genero">
+                      {{ genero }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success">
+            <i class="fas fa-save"></i> Guardar
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">
+            <i class="fas fa-times"></i> Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

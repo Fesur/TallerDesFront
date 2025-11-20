@@ -1,0 +1,45 @@
+<div class="roles-admin-container">
+  <h2>Gestión de Roles de Usuarios</h2>
+  <div class="card">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Correo</th>
+              <th>Rol</th>
+              <th>Cambiar Rol</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let usuario of usuarios">
+              <td>{{ usuario.Nombre }}</td>
+              <td>{{ usuario.Apellido }}</td>
+              <td>{{ usuario.Correo }}</td>
+              <td>
+                <span class="badge bg-primary">
+                  {{ getRolInfo(usuario.Rol)?.nombre || 'Desconocido' }}
+                </span>
+                <div class="text-muted small">
+                  {{ getRolInfo(usuario.Rol)?.descripcion }}
+                </div>
+              </td>
+              <td>
+                <select class="form-select" [ngModel]="usuario.Rol" (ngModelChange)="cambiarRol(usuario, $event)">
+                  <option *ngFor="let rol of roles" [value]="rol.id">
+                    {{ rol.nombre }}
+                  </option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="usuarios.length === 0" class="alert alert-info mt-3">
+        No hay usuarios registrados.
+      </div>
+    </div>
+  </div>
+</div>

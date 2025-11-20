@@ -1,0 +1,36 @@
+<div class="libro-detalle" *ngIf="libro">
+  <div class="libro-imagen">
+    <img [src]="libro.imagen || 'https://images.cdn1.buscalibre.com/fit-in/360x360/61/18/61189807904118e0fc5d2d5001de5929.jpg'" [alt]="libro.titulo"
+         (error)="libro.imagen = 'https://images.cdn1.buscalibre.com/fit-in/360x360/61/18/61189807904118e0fc5d2d5001de5929.jpg'">
+  </div>
+  <div class="libro-info">
+    <h1>{{libro.titulo}}</h1>
+    <p class="autor">por {{libro.autor}}</p>
+    <span class="categoria">{{libro.categoria || 'Sin categoría'}}</span>
+    <p class="descripcion">{{libro.descripcion}}</p>
+    
+    <div class="precio-container">
+      <span class="precio">${{libro.precio}}</span>
+      
+      <div class="cantidad-container" *ngIf="isLoggedIn">
+        <button class="cantidad-btn" (click)="decrementarCantidad()">-</button>
+        <span class="cantidad">{{cantidad}}</span>
+        <button class="cantidad-btn" (click)="incrementarCantidad()">+</button>
+      </div>
+
+      <button class="agregar-carrito" (click)="agregarAlCarrito()" *ngIf="isLoggedIn">
+        <i class="fas fa-shopping-cart"></i>
+        Agregar al Carrito
+      </button>
+      
+      <button class="login-required" (click)="irAlLogin()" *ngIf="!isLoggedIn">
+        <i class="fas fa-user"></i>
+        Iniciar sesión para agregar al carrito
+      </button>
+    </div>
+
+    <div class="total" *ngIf="isLoggedIn">
+      Total: ${{libro.precio * cantidad}}
+    </div>
+  </div>
+</div>

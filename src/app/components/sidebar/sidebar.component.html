@@ -1,0 +1,36 @@
+<div class="sidebar" [class.closed]="!isOpen">
+  <div class="sidebar-toggle" (click)="toggleSidebar()">
+    <i class="fas" [class.fa-chevron-left]="isOpen" [class.fa-chevron-right]="!isOpen"></i>
+  </div>
+  
+  <div class="sidebar-content">
+    <div class="sidebar-header">
+      <img src="assets/images/logov3.png" alt="Logo" class="sidebar-logo" 
+           onerror="this.src='https://via.placeholder.com/40x40/3498db/ffffff?text=BA'">
+      <h6 *ngIf="isOpen" style="margin-top: 0.5rem; font-size: 0.875rem;">Biblioteca<br>Alejandría</h6>
+    </div>
+
+    <div class="sidebar-menu">
+      <a routerLink="/home" routerLinkActive="active" class="sidebar-item" 
+         [routerLinkActiveOptions]="{exact: false}">
+        <i class="fas fa-home"></i>
+        <span *ngIf="isOpen">Inicio</span>
+      </a>
+      
+      <a routerLink="/carrito" routerLinkActive="active" class="sidebar-item">
+        <i class="fas fa-shopping-cart"></i>
+        <span *ngIf="isOpen">Mi Carrito</span>
+      </a>
+      
+      <a routerLink="/profile" routerLinkActive="active" class="sidebar-item">
+        <i class="fas fa-user-circle"></i>
+        <span *ngIf="isOpen">Mi Perfil</span>
+      </a>
+            
+      <a routerLink="/about" routerLinkActive="active" class="sidebar-item">
+        <i class="fas fa-info-circle"></i>
+        <span *ngIf="isOpen">Acerca de</span>
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,68 @@
+<div class="carrito-container">
+  <div class="carrito-header">
+    <h1>Mi Carrito</h1>
+    <button class="btn-continue" (click)="irAlHome()">
+      <i class="fas fa-arrow-left"></i>
+      Seguir reservando
+    </button>
+  </div>
+
+  @if (libros.length === 0) {
+    <div class="empty-cart">
+      <i class="fas fa-shopping-cart"></i>
+      <h2>Tu carrito está vacío</h2>
+      <p>Agrega algunos libros para comenzar</p>
+      <button class="btn-primary" (click)="irAlHome()">
+        Explorar libros
+      </button>
+    </div>
+  } @else {
+    <div class="cart-items">
+      @for (libro of libros; track libro.id) {
+        <div class="cart-item">
+          <div class="item-image">
+            <img [src]="libro.imagen || 'https://images.cdn1.buscalibre.com/fit-in/360x360/61/18/61189807904118e0fc5d2d5001de5929.jpg'" [alt]="libro.titulo"
+                 (error)="libro.imagen = 'https://images.cdn1.buscalibre.com/fit-in/360x360/61/18/61189807904118e0fc5d2d5001de5929.jpg'">
+          </div>
+          <div class="item-details">
+            <h3>{{ libro.titulo }}</h3>
+            <p class="author">por {{ libro.autor }}</p>
+            <div class="genres">
+              @for (genero of libro.generos; track genero) {
+                <span class="genre-tag">{{ genero }}</span>
+              }
+            </div>
+            <div class="price-quantity">
+              <span class="price">${{ libro.precio }}</span>
+              <div class="quantity-controls">
+                <button class="btn-quantity" (click)="actualizarCantidad(libro, libro.cantidad - 1)">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <span class="quantity">{{ libro.cantidad }}</span>
+                <button class="btn-quantity" (click)="actualizarCantidad(libro, libro.cantidad + 1)">
+                  <i class="fas fa-plus"></i>
+                </button>
+              </div>
+              <span class="subtotal">Subtotal: ${{ libro.precio * libro.cantidad }}</span>
+            </div>
+          </div>
+          <div class="item-actions">
+            <button class="btn-delete" (click)="eliminarDelCarrito(libro.id!)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="cart-summary">
+      <div class="total">
+        <span>Total:</span>
+        <span class="amount">${{ total }}</span>
+      </div>
+      <button class="btn-checkout" (click)="realizarReserva()">
+        Realizar reserva
+      </button>
+    </div>
+  }
+</div>

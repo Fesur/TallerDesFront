@@ -1,0 +1,12 @@
+.roles-admin-container {
+  padding: 1rem;
+}
+.card {
+  margin-top: 1rem;
+}
+.badge {
+  font-size: 0.9rem;
+}
+.table th, .table td {
+  vertical-align: middle;
+}

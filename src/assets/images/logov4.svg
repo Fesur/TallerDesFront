@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="300" viewBox="0 0 500 300">
+    <g transform="scale(0.8) translate(0, 0)">
+      
+        <!-- Books -->
+        <!-- Book 1 -->
+        <rect x="380" y="140" width="30" height="80" fill="#8B4513" />
+        <rect x="385" y="145" width="20" height="70" fill="#D2691E" />
+
+        <!-- Book 2 -->
+        <rect x="415" y="140" width="30" height="80" fill="#556B2F" />
+        <rect x="420" y="145" width="20" height="70" fill="#6B8E23" />
+
+        <!-- Book 3 (Tilted) -->
+        <g transform="rotate(10, 470, 200)">
+            <rect x="450" y="140" width="30" height="80" fill="#4682B4" />
+            <rect x="455" y="145" width="20" height="70" fill="#5F9EA0" />
+        </g>
+
+        <!-- Book 4 (Tilted) -->
+        <g transform="rotate(25, 510, 195)">
+            <rect x="490" y="140" width="30" height="80" fill="#8A2BE2" />
+            <rect x="495" y="145" width="20" height="70" fill="#9370DB" />
+        </g>
+    </g>
+</svg>

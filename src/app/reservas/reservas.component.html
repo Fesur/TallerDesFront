@@ -1,0 +1,36 @@
+<div class="container mt-4">
+  <h2>Mis Reservas</h2>
+  <div *ngIf="reservas.length === 0" class="alert alert-info mt-3">
+    No tienes reservas registradas.
+  </div>
+  <div *ngIf="reservas.length > 0" class="table-responsive mt-3">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Autor</th>
+          <th>Cantidad</th>
+          <th>Fecha de Reserva</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let reserva of reservas">
+          <td>{{ reserva.titulo }}</td>
+          <td>{{ reserva.autor }}</td>
+          <td>{{ reserva.cantidad }}</td>
+          <td>{{ reserva.fechaReserva?.toDate ? (reserva.fechaReserva.toDate() | date:'short') : (reserva.fechaReserva | date:'short') }}</td>
+          <td>
+            <span [ngClass]="{
+              'badge bg-warning': reserva.estado === 'En espera',
+              'badge bg-success': reserva.estado === 'Listo para recoger',
+              'badge bg-secondary': reserva.estado !== 'En espera' && reserva.estado !== 'Listo para recoger'
+            }">
+              {{ reserva.estado }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
