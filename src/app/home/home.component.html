@@ -2,10 +2,6 @@
   <header class="main-header">
     <h1>Biblioteca Alejandría</h1>
     <div class="header-actions">
-      <button class="login-button" *ngIf="!isLoggedIn" (click)="irAlLogin()">
-        <i class="fas fa-user"></i>
-        Iniciar Sesión
-      </button>
       <button class="user-menu" *ngIf="isLoggedIn" (click)="cerrarSesion()">
         <i class="fas fa-user"></i>
         Cerrar Sesión
@@ -57,11 +53,6 @@
                       (click)="agregarAlCarrito(libro); $event.stopPropagation()">
                 <i class="fas fa-shopping-cart"></i>
                 Agregar
-              </button>
-              <button class="btn-login" *ngIf="!isLoggedIn" 
-                      (click)="irAlLogin(); $event.stopPropagation()">
-                <i class="fas fa-user"></i>
-                Iniciar sesión
               </button>
             </div>
           </div>

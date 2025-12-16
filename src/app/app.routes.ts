@@ -7,6 +7,7 @@ import { LibroDetalleComponent } from './libro/libro-detalle.component';
 import { InventarioComponent } from './inventario/inventario.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AuthGuard } from './guards/auth.guard';
+import { KeycloakAuthGuard, RoleGuard } from './guards/keycloak-auth.guard';
 import { AdminDashboardComponent } from './admin/admin-dashboard.component';
 import { AdminBooksComponent } from './admin/books/admin-books.component';
 import { AdminReservationsComponent } from './admin/reservations/admin-reservations.component';
@@ -15,6 +16,7 @@ import { EmpleadoDashboardComponent } from './empleado/dashboard/empleado-dashbo
 import { EmpleadoBooksComponent } from './empleado/books/empleado-books.component';
 import { EmpleadoReservationsComponent } from './empleado/reservations/empleado-reservations.component';
 import { AdminRolesComponent } from './admin/roles/admin-roles.component';
+import { KeycloakTestComponent } from './keycloak-test/keycloak-test.component';
 
 export const routes: Routes = [
     {
@@ -27,12 +29,13 @@ export const routes: Routes = [
     },
     {
         path: 'about',
-        component: AboutComponent
+        component: AboutComponent,
+        canActivate: [KeycloakAuthGuard]
     },
     {
         path: 'carrito',
         component: CarritoComponent,
-        canActivate: [AuthGuard]
+        canActivate: [KeycloakAuthGuard]
     },
     {
         path: 'libro/:id',
@@ -41,29 +44,34 @@ export const routes: Routes = [
     {
         path: 'inventario',
         component: InventarioComponent,
-        canActivate: [AuthGuard]
+        canActivate: [KeycloakAuthGuard]
     },
     {
         path: 'profile',
         component: ProfileComponent,
-        canActivate: [AuthGuard]
+        canActivate: [KeycloakAuthGuard]
+    },
+    {
+        path: 'keycloak-test',
+        component: KeycloakTestComponent,
+        canActivate: [KeycloakAuthGuard]
     },
     {
         path: 'admin',
         component: AdminDashboardComponent,
-        canActivate: [AuthGuard],
+        canActivate: [KeycloakAuthGuard, RoleGuard],
         children: [
             { path: '', redirectTo: 'books', pathMatch: 'full' },
             { path: 'books', component: AdminBooksComponent },
             { path: 'reservations', component: AdminReservationsComponent },
-            { path: 'roles', component: AdminRolesComponent }, // Placeholder for roles management
+            { path: 'roles', component: AdminRolesComponent },
             { path: 'about', component: AdminAboutComponent }
         ]
     },
     {
         path: 'empleado',
         component: EmpleadoDashboardComponent,
-        canActivate: [AuthGuard],
+        canActivate: [KeycloakAuthGuard, RoleGuard],
         children: [
             { path: '', redirectTo: 'books', pathMatch: 'full' },
             { path: 'books', component: EmpleadoBooksComponent },

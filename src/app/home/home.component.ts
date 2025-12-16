@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { KeycloakAuthService } from '../services/keycloak-auth.service';
+import { CarritoService } from '../services/carrito.service';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
-import { Auth, onAuthStateChanged, signOut } from '@angular/fire/auth';
-import { CarritoService } from '../services/carrito.service';
 
 interface Libro {
   id?: string;
@@ -31,29 +31,54 @@ export class HomeComponent implements OnInit {
   isLoggedIn = false;
 
   constructor(
-    private firestore: Firestore,
     private router: Router,
-    private auth: Auth,
-    private carritoService: CarritoService
+    private keycloakAuthService: KeycloakAuthService,
+    private carritoService: CarritoService,
+    private firestore: Firestore
   ) {}
 
   ngOnInit() {
     this.cargarLibros();
-    onAuthStateChanged(this.auth, (user) => {
-      this.isLoggedIn = !!user;
+    this.keycloakAuthService.isAuthenticated.subscribe(isAuth => {
+      this.isLoggedIn = isAuth;
     });
   }
 
   cargarLibros() {
-    const librosRef = collection(this.firestore, 'libros');
-    const libros$ = collectionData(librosRef, { idField: 'id' }) as Observable<Libro[]>;
-    
-    libros$.subscribe(libros => {
-      this.libros = libros;
-      // Extraer géneros únicos
-      const todosLosGeneros = libros.flatMap(libro => libro.generos);
-      this.generos = [...new Set(todosLosGeneros)];
+    const librosCollection = collection(this.firestore, 'books');
+    collectionData(librosCollection, { idField: 'id' }).subscribe({
+      next: (libros: Libro[]) => {
+        this.libros = libros;
+        // Extraer géneros únicos
+        const todosLosGeneros = libros.flatMap(libro => libro.generos);
+        this.generos = [...new Set(todosLosGeneros)];
+      },
+      error: (err: any) => {
+        console.error('Error fetching books from Firestore:', err);
+        // Fallback to hardcoded if Firestore fails
+        this.libros = [
+          {
+            id: '1',
+            titulo: 'Frankenstein',
+            autor: 'Mary Shelley',
+            precio: 29.99,
+            stock: 10,
+            descripcion: 'Frankenstein o el moderno Prometeo...',
+            imagen: 'assets/images/frankenstein.jpg',
+            generos: ['Terror']
+          },
+          // Add more as needed
+        ];
+        this.generos = ['Terror'];
+      }
     });
+  }
+
+  get librosFiltrados(): Libro[] {
+    if (!this.generoSeleccionado) {
+      return this.libros;
+    }
+    return this.libros.filter(libro => libro.generos.includes(this.generoSeleccionado));
   }
 
   filtrarPorGenero(genero: string) {
@@ -64,14 +89,9 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/libro', libroId]);
   }
 
-  irAlLogin() {
-    this.router.navigate(['/login']);
-  }
-
   async cerrarSesion() {
     try {
-      await signOut(this.auth);
-      this.router.navigate(['/']);
+      await this.keycloakAuthService.logout();
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
     }
@@ -79,7 +99,7 @@ export class HomeComponent implements OnInit {
 
   async agregarAlCarrito(libro: Libro) {
     if (!this.isLoggedIn) {
-      this.irAlLogin();
+      // Login is forced by guard, but just in case
       return;
     }
 
@@ -96,12 +116,5 @@ export class HomeComponent implements OnInit {
     };
 
     await this.carritoService.agregarAlCarrito(libroParaCarrito);
-  }
-
-  get librosFiltrados(): Libro[] {
-    if (!this.generoSeleccionado) {
-      return this.libros;
-    }
-    return this.libros.filter(libro => libro.generos.includes(this.generoSeleccionado));
   }
 }

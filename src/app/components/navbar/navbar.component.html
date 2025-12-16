@@ -32,6 +32,19 @@
         <span>Mi Perfil</span>
       </a>
       
+      <!-- User Profile Display (Keycloak) -->
+      <div *ngIf="isLoggedIn && userProfile" class="navbar-item user-info">
+        <i class="fas fa-user"></i>
+        <span>{{ userProfile.firstName }} {{ userProfile.lastName }}</span>
+        <small>({{ userProfile.roles.join(', ') }})</small>
+      </div>
+      
+      <!-- Keycloak Test Link -->
+      <a *ngIf="isLoggedIn" routerLink="/keycloak-test" routerLinkActive="active" class="navbar-item test-link">
+        <i class="fas fa-flask"></i>
+        <span>Test Keycloak+Gateway</span>
+      </a>
+      
       <!-- Admin Panel Link -->
       <a *ngIf="isAdmin" routerLink="/admin" routerLinkActive="active" class="navbar-item admin-link">
         <i class="fas fa-cog"></i>
@@ -43,10 +56,13 @@
         <span>Panel Empleado</span>
       </a>
 
-      <a *ngIf="!isLoggedIn" routerLink="/login" routerLinkActive="active" class="navbar-item">
-        <i class="fas fa-user"></i>
-        <span>Iniciar Sesión</span>
-      </a>
+      <!-- Login Options -->
+      <div *ngIf="!isLoggedIn" class="navbar-item login-options">
+        <a routerLink="/login" routerLinkActive="active" class="navbar-item firebase-btn">
+          <i class="fas fa-user"></i>
+          <span>Firebase Login</span>
+        </a>
+      </div>
 
       <button *ngIf="isLoggedIn" (click)="cerrarSesion()" class="navbar-item logout-btn">
         <i class="fas fa-sign-out-alt"></i>
