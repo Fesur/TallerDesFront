@@ -29,3 +29,9 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 curl.exe -sO http://localhost:60000/jnlpJars/agent.jar
 java -jar agent.jar -url http://localhost:60000/ -secret fa7114680ba23fd348261519d27946d8a3194d1ba6cce9bef0f47f3e958dd99b -name "Windows-VM" -webSocket -workDir "C:\JenkinsAgent"
 
+java -jar agent.jar ^
+-url http://192.168.0.100:8080/ ^
+-secret 123456789abcdef ^
+-name "Windows-VM" ^
+-workDir "C:\JenkinsAgent"
+
